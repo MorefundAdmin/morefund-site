@@ -140,7 +140,8 @@
     /* Responsive */
     @media (max-width:980px){.hero-wrap,.cta-box,.footer-grid{grid-template-columns:1fr}.cards{grid-template-columns:1fr 1fr}.steps{grid-template-columns:1fr 1fr}}
     @media (max-width:640px){.cards{grid-template-columns:1fr}.steps{grid-template-columns:1fr}.input-row{grid-template-columns:1fr}.nav a{display:none}}
-      /* Centered toast */
+
+    /* Centered toast */
     .toast-backdrop{
       position:fixed; inset:0;
       display:flex; align-items:center; justify-content:center;
@@ -203,22 +204,24 @@
         </div>
       </div>
 
-      <form class="hero-card" id="lead" aria-labelledby="lead-title">
+      <!-- SINGLE Netlify form (no nesting, no JS preventDefault) -->
+      <form class="hero-card" name="lead" id="lead" method="POST" data-netlify="true" netlify-honeypot="company" action="/thanks.html" aria-labelledby="lead-title">
         <div class="badge-row">
           <span class="badge">Get started in minutes</span>
           <span class="badge" aria-hidden="true">No hidden fees</span>
         </div>
         <h3 id="lead-title" style="margin:4px 0 0">Start Your Application</h3>
+
+        <!-- Honeypot -->
+        <p style="position:absolute;left:-9999px;opacity:0" aria-hidden="true">
+          <label>Company <input name="company" tabindex="-1" autocomplete="off"></label>
+        </p>
+        <input type="hidden" name="form-name" value="lead">
+
         <div class="input-row">
           <input class="input" type="text" name="name" placeholder="Full Name" aria-label="Full Name" required>
           <input class="input" type="tel" name="mobile" placeholder="Mobile (e.g., 09xx… )" aria-label="Mobile" pattern="^(09|\+639)\d{9}$" inputmode="numeric" required>
         </div>
-        <form name="lead" id="lead" method="POST" data-netlify="true" netlify-honeypot="company" action="/thanks.html">
-        <input type="hidden" name="form-name" value="lead">
-        <!-- Honeypot (hidden field that real users won’t fill) -->
-        <p style="position:absolute;left:-9999px;opacity:0" aria-hidden="true">
-          <label>Company <input name="company" tabindex="-1" autocomplete="off"></label>
-        </p>
         <div class="input-row">
           <select class="select" name="loanType" aria-label="Loan Type" required>
             <option value="" disabled selected>Choose loan type</option>
@@ -331,12 +334,17 @@
       <div class="cards" style="grid-template-columns: 1.3fr 1fr 1fr;">
         <div class="card">
           <h3>Message</h3>
-          <form class="grid" id="contactForm">
-            <input class="input" type="text" name="cname" placeholder="Full Name" required>
+          <!-- Netlify contact form -->
+          <form class="grid" name="contact" id="contactForm" method="POST" data-netlify="true" netlify-honeypot="company" action="/thanks.html">
+            <input type="hidden" name="form-name" value="contact">
+            <p style="position:absolute;left:-9999px;opacity:0" aria-hidden="true">
+              <label>Company <input name="company" tabindex="-1" autocomplete="off"></label>
+            </p>
+            <input class="input" type="text"  name="cname"  placeholder="Full Name" required>
             <input class="input" type="email" name="cemail" placeholder="Email" required>
             <textarea class="input" name="cmsg" placeholder="How can we help?" rows="4" required></textarea>
             <button class="submit" type="submit">Send</button>
-            <div class="note">This is a static demo. Hook it to your email/API when you deploy.</div>
+            <div class="note">We respect your privacy and handle data per RA 10173 (DPA).</div>
           </form>
         </div>
         <div class="card">
@@ -537,30 +545,28 @@
       });
     }
 
-    // Toast + demo form handlers
+    // Centered toast (kept for future use; NOT used on submit so it won't block Netlify)
     function toast(msg){
-  const backdrop=document.createElement('div');
-  backdrop.className='toast-backdrop';
-  backdrop.setAttribute('role','status');
-  backdrop.setAttribute('aria-live','polite');
+      const backdrop=document.createElement('div');
+      backdrop.className='toast-backdrop';
+      backdrop.setAttribute('role','status');
+      backdrop.setAttribute('aria-live','polite');
 
-  const box=document.createElement('div');
-  box.className='toast-box';
-  box.textContent = msg || 'Thanks! We will contact you shortly.';
+      const box=document.createElement('div');
+      box.className='toast-box';
+      box.textContent = msg || 'Thanks! We will contact you shortly.';
 
-  backdrop.appendChild(box);
-  document.body.appendChild(backdrop);
+      backdrop.appendChild(box);
+      document.body.appendChild(backdrop);
 
-  const hide=()=>{
-    backdrop.style.animation='toastFade .2s ease reverse forwards';
-    box.style.animation='toastPop .2s ease reverse forwards';
-    setTimeout(()=>backdrop.remove(), 180);
-  };
-  setTimeout(hide, 2200);
-  backdrop.addEventListener('click', hide);
-}
-    document.getElementById('lead').addEventListener('submit',(e)=>{ e.preventDefault(); const data=Object.fromEntries(new FormData(e.target)); console.log('Lead (demo):',data); toast('Thanks! We will contact you shortly.'); e.target.reset(); });
-    document.getElementById('contactForm').addEventListener('submit',(e)=>{ e.preventDefault(); const data=Object.fromEntries(new FormData(e.target)); console.log('Contact (demo):',data); toast('Message sent (demo)'); e.target.reset(); });
+      const hide=()=>{
+        backdrop.style.animation='toastFade .2s ease reverse forwards';
+        box.style.animation='toastPop .2s ease reverse forwards';
+        setTimeout(()=>backdrop.remove(), 180);
+      };
+      setTimeout(hide, 2200);
+      backdrop.addEventListener('click', hide);
+    }
 
     // Scroll-reveal animations for cards
     (function(){
