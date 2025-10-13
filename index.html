@@ -204,8 +204,8 @@
         </div>
       </div>
 
-      <!-- SINGLE Netlify form (no nesting, no JS preventDefault) -->
-      <form class="hero-card" name="lead" id="lead" method="POST" data-netlify="true" netlify-honeypot="company" action="/thanks.html" aria-labelledby="lead-title">
+      <!-- SINGLE Netlify form with optional Email -->
+      <form class="hero-card" name="lead" id="lead" method="POST" data-netlify="true" netlify-honeypot="company" aria-labelledby="lead-title">
         <div class="badge-row">
           <span class="badge">Get started in minutes</span>
           <span class="badge" aria-hidden="true">No hidden fees</span>
@@ -218,11 +218,16 @@
         </p>
         <input type="hidden" name="form-name" value="lead">
 
+        <!-- Row 1: Full Name + Email (email is OPTIONAL) -->
         <div class="input-row">
           <input class="input" type="text" name="name" placeholder="Full Name" aria-label="Full Name" required>
-          <input class="input" type="tel" name="mobile" placeholder="Mobile (e.g., 09xx… )" aria-label="Mobile" pattern="^(09|\+639)\d{9}$" inputmode="numeric" required>
+          <input class="input" type="email" name="email" placeholder="Email Address" aria-label="Email Address">
         </div>
+
+        <!-- Row 2: Mobile + Loan Type -->
         <div class="input-row">
+          <input class="input" type="tel" name="mobile" placeholder="Mobile (e.g., 09xx… )" aria-label="Mobile"
+                 pattern="^(09|\+639)\d{9}$" inputmode="numeric" required>
           <select class="select" name="loanType" aria-label="Loan Type" required>
             <option value="" disabled selected>Choose loan type</option>
             <option>Sangla OR/CR</option>
@@ -231,8 +236,13 @@
             <option>Real Estate Mortgage (REM)</option>
             <option>Women’s Access to Inclusive Support (WAIS)</option>
           </select>
-          <input class="input" type="number" name="amount" placeholder="Desired Amount (PHP)" aria-label="Desired Amount (PHP)" min="10000" step="1000" required>
         </div>
+
+        <!-- Row 3: Amount (full width) -->
+        <div class="input-row">
+          <input class="input" type="number" name="amount" placeholder="Desired Amount (PHP)" aria-label="Desired Amount (PHP)" min="10000" step="1000" style="grid-column:1 / -1" required>
+        </div>
+
         <button type="submit" class="submit">Request a Callback</button>
         <div class="note">By submitting, you agree to be contacted via call/text/email. We respect your privacy and handle data per RA 10173 (DPA).</div>
       </form>
@@ -335,7 +345,7 @@
         <div class="card">
           <h3>Message</h3>
           <!-- Netlify contact form -->
-          <form class="grid" name="contact" id="contactForm" method="POST" data-netlify="true" netlify-honeypot="company" action="/thanks.html">
+          <form class="grid" name="contact" id="contactForm" method="POST" data-netlify="true" netlify-honeypot="company">
             <input type="hidden" name="form-name" value="contact">
             <p style="position:absolute;left:-9999px;opacity:0" aria-hidden="true">
               <label>Company <input name="company" tabindex="-1" autocomplete="off"></label>
@@ -545,7 +555,7 @@
       });
     }
 
-    // Centered toast (kept for future use; NOT used on submit so it won't block Netlify)
+    // Centered toast
     function toast(msg){
       const backdrop=document.createElement('div');
       backdrop.className='toast-backdrop';
@@ -567,6 +577,40 @@
       setTimeout(hide, 2200);
       backdrop.addEventListener('click', hide);
     }
+
+    // ===== AJAX submit to Netlify (no redirect) =====
+    async function submitNetlifyForm(form) {
+      const data = new FormData(form);
+      if (!data.get('form-name')) data.append('form-name', form.getAttribute('name'));
+      const body = new URLSearchParams(data).toString();
+      const res = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body
+      });
+      if (!res.ok) throw new Error('Network response was not ok');
+    }
+
+    // Attach to both forms
+    [['lead','Thanks! We will contact you shortly.'], ['contactForm','Message sent!']].forEach(([id, okMsg])=>{
+      const form=document.getElementById(id);
+      if(!form) return;
+      form.addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        const btn=form.querySelector('button[type="submit"]');
+        btn && (btn.disabled=true);
+        try{
+          await submitNetlifyForm(form);
+          toast(okMsg);
+          form.reset();
+        }catch(err){
+          console.error('Form submit failed:', err);
+          toast('Something went wrong. Please try again.');
+        }finally{
+          btn && (btn.disabled=false);
+        }
+      });
+    });
 
     // Scroll-reveal animations for cards
     (function(){
