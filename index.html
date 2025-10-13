@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MoreFund PH — Your Reliable Funding Partner</title>
+  <meta name="description" content="MoreFund PH is a professional funding partner in the Philippines offering fast, transparent, and responsible loan brokerage services for individuals and SMEs." />
+  <meta name="theme-color" content="#0f6f3d" />
+  <meta property="og:title" content="MoreFund PH — Your Reliable Funding Partner" />
+  <meta property="og:description" content="Fast, transparent, and responsible loan solutions for Filipinos and SMEs." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="/morefund-og.png" />
+  <meta property="og:url" content="https://morefund.ph/" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --green-900:#0f6f3d; --green-700:#167a45; --green-600:#16a34a; --green-500:#22c55e;
+      --green-100:#e8f5ee; --green-50:#f3fbf7; --slate-900:#0b1324; --slate-700:#334155; --slate-500:#64748b; --slate-300:#cbd5e1; --white:#ffffff;
+      --shadow:0 10px 30px rgba(15,111,61,0.15); --radius-xl:20px; --radius-lg:14px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;color:var(--slate-900);background:var(--white);line-height:1.6;overflow-x:hidden;}
+    a{color:var(--green-700);text-decoration:none} a:hover{text-decoration:underline}
+    .container{width:min(1120px,92%);margin-inline:auto}
+
+    /* Smooth scroll + header offset */
+    html{scroll-behavior:smooth}
+    section[id]{scroll-margin-top:96px}
+
+    /* ================== Background Animations ================== */
+    .page-bg{position:fixed;inset:0;z-index:-2;pointer-events:none;
+      background:
+        repeating-linear-gradient(135deg, rgba(34,197,94,.08) 0 2px, transparent 2px 26px),
+        radial-gradient(1200px 1200px at 10% -10%, rgba(34,197,94,.18), transparent 60%),
+        radial-gradient(1000px 1000px at 110% 10%, rgba(15,111,61,.18), transparent 60%),
+        #fff;
+      animation: gridShift 24s linear infinite;
+    }
+    @keyframes gridShift{ from{background-position:0 0,0 0,0 0,0 0} to{background-position:300px 300px,0 0,0 0,0 0} }
+
+    /* Header */
+    header{position:sticky; top:0; z-index:50; backdrop-filter:saturate(160%) blur(6px); background:rgba(255,255,255,.86); border-bottom:1px solid var(--green-100)}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 0}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:40px;height:40px;border-radius:50%;background:radial-gradient(120% 120% at 30% 30%, var(--green-500), var(--green-900));display:grid;place-items:center;color:#fff;font-weight:800;box-shadow:var(--shadow);letter-spacing:-.02em}
+    .brand h1{font-size:18px;margin:0;letter-spacing:.2px}
+    .nav a{font-weight:600;margin:0 12px;color:var(--slate-700)}
+    .cta-btn{background:var(--green-900);color:#fff;border:none;border-radius:999px;padding:12px 18px;font-weight:700;box-shadow:var(--shadow);transition:transform .04s ease}
+    .cta-btn:hover{transform:translateY(-1px)}
+
+    /* Hero */
+    .hero{position:relative; padding:64px 0 28px; background: linear-gradient(180deg, var(--green-50), transparent 55%); overflow:hidden}
+    .hero .orb{position:absolute; border-radius:50%; filter:blur(40px); mix-blend:multiply; opacity:.55; transform:translateZ(0)}
+    .hero .orb.o1{width:420px;height:420px; left:-120px; top:-80px; background:radial-gradient(circle at 30% 30%, #22c55e 0%, #16a34a 40%, transparent 70%); animation: drift1 18s ease-in-out infinite alternate}
+    .hero .orb.o2{width:520px;height:520px; right:-160px; top:-60px; background:radial-gradient(circle at 70% 40%, #0f6f3d 0%, #16a34a 40%, transparent 70%); animation: drift2 22s ease-in-out infinite alternate}
+    .hero .orb.o3{width:380px;height:380px; left:40%; bottom:-140px; background:radial-gradient(circle at 30% 70%, #22c55e 0%, #0f6f3d 50%, transparent 72%); animation: drift3 26s ease-in-out infinite alternate}
+    @keyframes drift1{0%{transform:translate(0,0) scale(1)}100%{transform:translate(30px,20px) scale(1.08)}}
+    @keyframes drift2{0%{transform:translate(0,0) scale(1)}100%{transform:translate(-40px,24px) scale(1.06)}}
+    @keyframes drift3{0%{transform:translate(0,0) scale(1)}100%{transform:translate(40px,-24px) scale(1.05)}}
+
+    .hero-wrap{position:relative; z-index:1; display:grid; grid-template-columns:1.1fr 1fr; gap:28px; align-items:center}
+    .eyebrow{color:var(--green-700);font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:12px}
+    h2.hero-title{font-size:clamp(32px,4.6vw,54px);line-height:1.1;margin:10px 0 14px;letter-spacing:-.02em}
+    .hero p{color:var(--slate-700);font-size:clamp(16px,1.8vw,18px)}
+
+    .hero-card{background:#fff;border:1px solid var(--green-100);border-radius:var(--radius-xl);padding:20px;box-shadow:var(--shadow);display:grid;gap:14px}
+    .badge-row{display:flex;gap:10px;flex-wrap:wrap}
+    .badge{background:var(--green-100);color:var(--green-900);border-radius:999px;padding:6px 10px;font-weight:700;font-size:12px}
+
+    .input-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .input,.select{width:100%;padding:12px 14px;border:1px solid var(--slate-300);border-radius:12px;font:inherit;background:var(--white);color:var(--slate-900);}
+    .input:focus,.select:focus{outline:3px solid color-mix(in oklab, var(--green-500) 22%, transparent);border-color:var(--green-600)}
+    .submit{padding:12px 16px;border-radius:12px;font-weight:800;border:none;background:linear-gradient(90deg,var(--green-900),var(--green-600));color:#fff;cursor:pointer}
+    .note{font-size:12px;color:var(--slate-500)}
+
+    /* Wave divider */
+    .wave{position:absolute; left:0; right:0; bottom:-1px; height:120px; z-index:0}
+    .wave svg{width:100%; height:100%; display:block}
+    .wave path{animation: waveMove 12s linear infinite}
+    @keyframes waveMove{ from{transform:translateX(0)} to{transform:translateX(-6%)} }
+
+    /* Sections */
+    section{padding:56px 0}
+    .section-title{font-size:clamp(24px,3.2vw,36px);margin:0 0 10px;letter-spacing:-.01em}
+    .section-sub{color:var(--slate-700);margin:0 0 24px}
+
+    /* Cards + Animations */
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .card{position:relative;border:1px solid var(--green-100);border-radius:var(--radius-lg);padding:20px;background:#fff;box-shadow:var(--shadow);overflow:hidden;transition:transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s cubic-bezier(.2,.8,.2,1)}
+    .card:hover{transform:translateY(-6px)}
+    .card:focus-within{transform:translateY(-4px)}
+    .card::after{content:"";position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;background:linear-gradient(120deg,transparent,rgba(255,255,255,.55),transparent);transform:translateX(-160%);transition:transform .7s ease;mix-blend-mode:screen}
+    .card:hover::after{transform:translateX(160%)}
+    .icon{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:var(--green-50);border:1px solid var(--green-100);margin-bottom:8px}
+    .reveal{opacity:0;transform:translateY(18px) scale(.98)}
+    .reveal.in{opacity:1;transform:translateY(0) scale(1);transition:opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1);transition-delay:var(--d,0ms)}
+    .cards .card:hover{transform:translateY(-8px) rotate3d(.5,1,0,0.3deg)}
+    .steps .card:hover{transform:translateY(-6px) rotate3d(1,.2,0,0.25deg)}
+
+    .steps{grid-template-columns:repeat(4,1fr)}
+    .step .num{font-weight:900;color:var(--green-600)}
+
+    details{border:1px solid var(--green-100);border-radius:12px;padding:14px 16px;background:#fff}
+    details+details{margin-top:10px}
+    summary{cursor:pointer;font-weight:700;color:var(--slate-900)}
+    details p{margin:8px 0 0;color:var(--slate-700)}
+
+    .cta-band{background:linear-gradient(180deg,var(--green-100),var(--green-50));border-top:1px solid var(--green-100);border-bottom:1px solid var(--green-100)}
+    .cta-box{display:grid;grid-template-columns:1.6fr .9fr;gap:18px;align-items:center}
+
+    footer{padding:38px 0;color:var(--slate-700);border-top:1px solid var(--green-100);background:var(--green-50)}
+    .footer-grid{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:18px}
+    .foot h4{margin-top:0;margin-bottom:6px}
+    .tiny{font-size:12px;color:var(--slate-500)}
+
+    /* Modals (Policy/TOS/Responsible Borrowing) */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(11,19,36,.46);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:1000}
+    .modal-backdrop.show{display:flex;animation:fadeIn .2s ease}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    .modal{width:min(880px,92%);max-height:min(80vh,880px);background:#fff;border:1px solid var(--green-100);border-radius:20px;box-shadow:0 24px 60px rgba(15,111,61,.25);overflow:hidden;transform:translateY(18px);animation:slideUp .28s ease forwards}
+    @keyframes slideUp{to{transform:translateY(0)}}
+    .modal header{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--green-100);background:linear-gradient(180deg,#f8fcfa,#fff)}
+    .modal header h3{margin:0;font-size:18px;color:var(--green-900)}
+    .modal .close{appearance:none;border:none;background:transparent;font-size:22px;line-height:1;cursor:pointer;color:#334155;border-radius:8px;padding:6px}
+    .modal .close:hover{background:#f3fbf7}
+    .modal .body{padding:18px;overflow:auto;max-height:calc(min(80vh,880px) - 120px)}
+    .modal .body h4{margin:12px 0 6px;color:#0b1324}
+    .modal .body p,.modal .body li{color:#334155}
+    .modal footer{padding:12px 18px;border-top:1px solid var(--green-100);display:flex;justify-content:flex-end;gap:10px;background:#fff}
+    .btn{background:var(--green-900);color:#fff;border:none;border-radius:999px;padding:10px 16px;font-weight:700;box-shadow:0 10px 30px rgba(15,111,61,.15);cursor:pointer}
+    .btn.secondary{background:#e8f5ee;color:var(--green-900)}
+
+    /* Motion safety */
+    @media (prefers-reduced-motion: reduce){
+      .page-bg,.hero .orb,.wave path,.modal-backdrop,.modal{animation:none}
+    }
+
+    /* Responsive */
+    @media (max-width:980px){.hero-wrap,.cta-box,.footer-grid{grid-template-columns:1fr}.cards{grid-template-columns:1fr 1fr}.steps{grid-template-columns:1fr 1fr}}
+    @media (max-width:640px){.cards{grid-template-columns:1fr}.steps{grid-template-columns:1fr}.input-row{grid-template-columns:1fr}.nav a{display:none}}
+  </style>
+</head>
+<body>
+  <div class="page-bg" aria-hidden="true"></div>
+
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">MF</div>
+        <h1 aria-label="MoreFund Philippines">MoreFund PH</h1>
+      </div>
+      <nav aria-label="Primary">
+        <a href="#services">Services</a>
+        <a href="#process">How it works</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+        <button class="cta-btn" onclick="document.getElementById('lead').scrollIntoView({behavior:'smooth'})">Apply Now</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="orb o1" aria-hidden="true"></div>
+    <div class="orb o2" aria-hidden="true"></div>
+    <div class="orb o3" aria-hidden="true"></div>
+
+    <div class="container hero-wrap">
+      <div>
+        <div class="eyebrow">Funding made simple</div>
+        <h2 class="hero-title">Your Reliable Funding Partner in the Philippines</h2>
+        <p>We help individuals and SMEs access responsible, transparent, and fast loan solutions through our network of trusted lenders. Zero jargon. Straightforward steps. Human support.</p>
+        <div class="trust" style="margin-top:18px">
+          <div class="pill">Fast pre-screening</div>
+          <div class="pill">Clear requirements</div>
+          <div class="pill">Data privacy first</div>
+        </div>
+      </div>
+
+      <form class="hero-card" id="lead" aria-labelledby="lead-title">
+        <div class="badge-row">
+          <span class="badge">Get started in minutes</span>
+          <span class="badge" aria-hidden="true">No hidden fees</span>
+        </div>
+        <h3 id="lead-title" style="margin:4px 0 0">Start Your Application</h3>
+        <div class="input-row">
+          <input class="input" type="text" name="name" placeholder="Full Name" aria-label="Full Name" required>
+          <input class="input" type="tel" name="mobile" placeholder="Mobile (e.g., 09xx… )" aria-label="Mobile" pattern="^(09|\+639)\d{9}$" inputmode="numeric" required>
+        </div>
+
+        <form name="lead" id="lead" method="POST" data-netlify="true" netlify-honeypot="company" action="/thanks.html">
+        <input type="hidden" name="form-name" value="lead">
+        <!-- Honeypot (hidden field that real users won’t fill) -->
+        <p style="position:absolute;left:-9999px;opacity:0" aria-hidden="true">
+          <label>Company <input name="company" tabindex="-1" autocomplete="off"></label>
+        </p>
+        <div class="input-row">
+          <select class="select" name="loanType" aria-label="Loan Type" required>
+            <option value="" disabled selected>Choose loan type</option>
+            <option>Sangla OR/CR</option>
+            <option>OFW/Seaman Loan</option>
+            <option>Vehicle Loan</option>
+            <option>Real Estate Mortgage (REM)</option>
+            <option>Women’s Access to Inclusive Support (WAIS)</option>
+          </select>
+          <input class="input" type="number" name="amount" placeholder="Desired Amount (PHP)" aria-label="Desired Amount (PHP)" min="10000" step="1000" required>
+        </div>
+        <button type="submit" class="submit">Request a Callback</button>
+        <div class="note">By submitting, you agree to be contacted via call/text/email. We respect your privacy and handle data per RA 10173 (DPA).</div>
+      </form>
+    </div>
+
+    <div class="wave" aria-hidden="true">
+      <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+        <path fill="#ffffff" fill-opacity="1" d="M0,64 C240,120 360,0 720,64 C1080,128 1200,16 1440,64 L1440,120 L0,120 Z"></path>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services">
+    <div class="container">
+      <h2 class="section-title">What we do</h2>
+      <p class="section-sub">We match your needs with vetted lending partners and guide you from requirements to release.</p>
+      <div class="cards">
+        <article class="card reveal">
+          <div class="icon" aria-hidden="true">🧭</div>
+          <h3>OFW / Seaman Loan</h3>
+          <p>Exclusive loan programs tailored for Overseas Filipino Workers (OFWs) and Seafarers, offering fast processing and flexible terms to support your family or investment goals while abroad.</p>
+        </article>
+        <article class="card reveal">
+          <div class="icon" aria-hidden="true">🚗</div>
+          <h3>Sangla OR / CR</h3>
+          <p>Turn your vehicle into an opportunity with Sangla OR/CR loans—keep driving your car while using its registration papers as collateral for quick, transparent financing.</p>
+        </article>
+        <article class="card reveal">
+          <div class="icon" aria-hidden="true">🏠</div>
+          <h3>Real Estate Mortgage (REM)</h3>
+          <p>Leverage property assets for larger financing with transparent appraisal and clear timelines.</p>
+        </article>
+        <article class="card reveal">
+          <div class="icon" aria-hidden="true">👩‍💼</div>
+          <h3>WAIS Program</h3>
+          <p>Women-led ventures receive tailored guidance and inclusive access to partner products.</p>
+        </article>
+        <article class="card reveal">
+          <div class="icon" aria-hidden="true">🛡️</div>
+          <h3>Compliance & Guidance</h3>
+          <p>We explain the fine print and champion transparent fees, so you always know what you’re signing.</p>
+        </article>
+        <article class="card reveal">
+          <div class="icon" aria-hidden="true">🤝</div>
+          <h3>End-to-End Support</h3>
+          <p>From document checklist to release—we stay with you each step with real human support.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section id="process" style="padding-top:0">
+    <div class="container">
+      <h2 class="section-title">How it works</h2>
+      <p class="section-sub">Four simple steps to secure the funding you need.</p>
+      <div class="grid steps">
+        <div class="card step reveal"><div class="num">01</div><h3>Pre-Screen</h3><p>Share basics: ID, source of income, collateral (if any), and target amount. We check lender fit.</p></div>
+        <div class="card step reveal"><div class="num">02</div><h3>Requirements</h3><p>Receive a clear checklist. Upload or hand over documents with guidance from our team.</p></div>
+        <div class="card step reveal"><div class="num">03</div><h3>Evaluation</h3><p>Partner lenders verify details and provide terms. We explain rates, fees, and timelines.</p></div>
+        <div class="card step reveal"><div class="num">04</div><h3>Release</h3><p>Upon approval, funds are released per lender policy. We ensure a smooth hand-off.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA band -->
+  <section class="cta-band">
+    <div class="container cta-box">
+      <div>
+        <h2 class="section-title" style="margin-bottom:6px">Ready to explore your options?</h2>
+        <p class="section-sub" style="margin:0">Speak with a MoreFund specialist for a no-pressure consultation.</p>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+        <a class="cta-btn" href="#lead">Start Application</a>
+        <button class="cta-btn" style="background:var(--green-600)" id="copyEmail">Copy Email</button>
+        <span class="tiny" id="copyNote" role="status" aria-live="polite"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="container">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <p class="section-sub">Clear answers to common questions. Need more help? Contact us anytime.</p>
+      <details><summary>Is MoreFund a lender?</summary><p>We are a professional brokerage/telemarketing partner that connects clients to vetted lending institutions. We guide you through requirements and terms so you can decide confidently.</p></details>
+      <details><summary>How long does approval take?</summary><p>Timelines vary by lender and loan type. With complete documents, many applications receive decisions within a few business days.</p></details>
+      <details><summary>Are there hidden fees?</summary><p>No. We advocate transparent pricing. All costs and rates are disclosed by partner lenders before you proceed.</p></details>
+      <details><summary>Do you serve clients outside Metro Manila?</summary><p>Yes, we assist clients across the Philippines. Availability may vary by product and lender coverage.</p></details>
+    </div>
+  </section>
+
+  <!-- Contact / Footer -->
+  <section id="contact">
+    <div class="container">
+      <h2 class="section-title">Contact us</h2>
+      <p class="section-sub">We’ll respond within one business day.</p>
+      <div class="cards" style="grid-template-columns: 1.3fr 1fr 1fr;">
+        <div class="card">
+          <h3>Message</h3>
+          <form class="grid" id="contactForm">
+            <input class="input" type="text" name="cname" placeholder="Full Name" required>
+            <input class="input" type="email" name="cemail" placeholder="Email" required>
+            <textarea class="input" name="cmsg" placeholder="How can we help?" rows="4" required></textarea>
+            <button class="submit" type="submit">Send</button>
+            <div class="note">This is a static demo. Hook it to your email/API when you deploy.</div>
+          </form>
+        </div>
+        <div class="card">
+          <h3>Reach us</h3>
+          <p><strong>Phone</strong><br><a href="tel:+639499555254">09499555254</a></p>
+          <p><strong>Email</strong><br><a id="emailLink" href="mailto:marketing@morefund.biz">marketing@morefund.biz</a></p>
+          <p><strong>Hours</strong><br>Mon–Sat, 9:00–18:00 PH Time</p>
+        </div>
+        <div class="card">
+          <h3>Office</h3>
+          <p>MoreFund Philippines<br>Angeles / Mabalacat, Pampanga</p>
+          <p class="tiny">*For scheduled appointments only</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container footer-grid">
+      <div class="foot">
+        <div class="brand" style="margin-bottom:8px">
+          <div class="logo" aria-hidden="true">MF</div>
+          <strong>MoreFund PH</strong>
+        </div>
+        <p class="tiny">Your Reliable Funding Partner. We connect clients to vetted lenders and support responsible borrowing.</p>
+        <p class="tiny">© <span id="year"></span> MoreFund PH. All rights reserved.</p>
+      </div>
+      <div class="foot">
+        <h4>Company</h4>
+        <ul style="list-style:none; padding:0; margin:0; display:grid; gap:6px">
+          <li><a href="#services">Services</a></li>
+          <li><a href="#process">How it works</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="foot">
+        <h4>Legal</h4>
+        <ul style="list-style:none; padding:0; margin:0; display:grid; gap:6px">
+          <li><a href="#" id="privacyLink">Privacy Policy</a></li>
+          <li><a href="#" id="tosLink">Terms of Service</a></li>
+          <li><a href="#" id="rbLink">Responsible Borrowing</a></li>
+        </ul>
+      </div>
+      <div class="foot">
+        <h4>Compliance</h4>
+        <p class="tiny">MoreFund PH operates as a brokerage/marketing partner and coordinates with duly registered lending institutions. We observe the Data Privacy Act of 2012 (RA 10173) and applicable DTI/SEC guidelines.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Privacy Policy Modal -->
+  <div class="modal-backdrop" id="privacyModal" aria-hidden="true" role="dialog" aria-labelledby="privacyTitle">
+    <div class="modal" role="document">
+      <header>
+        <h3 id="privacyTitle">Privacy Policy</h3>
+        <button class="close" id="privacyClose" aria-label="Close">×</button>
+      </header>
+      <div class="body">
+        <p><strong>Last updated:</strong> October 14, 2025</p>
+        <p>MoreFund PH (“we”, “us”) respects your privacy. This policy explains what personal data we collect, how we use it, and your rights under the Data Privacy Act of 2012 (RA 10173).</p>
+
+        <h4>1. Information We Collect</h4>
+        <ul>
+          <li><strong>Identity & Contact:</strong> name, email, mobile number.</li>
+          <li><strong>Application Details:</strong> chosen loan type, desired amount, optional notes.</li>
+          <li><strong>Technical:</strong> basic analytics (device/browser, pages viewed) to improve the site; no sensitive tracking.</li>
+        </ul>
+
+        <h4>2. How We Use Your Information</h4>
+        <ul>
+          <li>Pre-screening and handling of your loan inquiry.</li>
+          <li>Coordinating with vetted lending partners for evaluation.</li>
+          <li>Providing updates, customer support, and compliance with legal/regulatory requirements.</li>
+        </ul>
+
+        <h4>3. Lawful Basis</h4>
+        <ul>
+          <li><em>Consent</em> — when you submit forms or contact us.</li>
+          <li><em>Legitimate interests</em> — to run and secure our services and prevent fraud.</li>
+          <li><em>Legal obligations</em> — to comply with applicable laws and regulators.</li>
+        </ul>
+
+        <h4>4. Sharing & Disclosure</h4>
+        <p>We may share your data with duly registered lending institutions strictly to process your application. We do not sell your data. Vendors (e.g., hosting, analytics) only process data under our instructions and safeguards.</p>
+
+        <h4>5. Retention</h4>
+        <p>We retain data only as long as necessary for the purposes above, and to meet legal/accounting requirements. When no longer needed, we securely erase or anonymize data.</p>
+
+        <h4>6. Your Rights</h4>
+        <ul>
+          <li>Right to be informed and to object to processing not based on legal grounds.</li>
+          <li>Right to access, rectify, and request deletion of your personal data.</li>
+          <li>Right to data portability and to lodge a complaint with the NPC.</li>
+        </ul>
+
+        <h4>7. Security</h4>
+        <p>We use administrative, technical, and physical safeguards to protect personal data. While no method is 100% secure, we continually improve our controls.</p>
+
+        <h4>8. International Transfers</h4>
+        <p>If any services are hosted outside the Philippines, we apply appropriate safeguards consistent with RA 10173.</p>
+
+        <h4>9. Contact Our Data Protection Officer</h4>
+        <p>Email: <a href="mailto:marketing@morefund.biz">marketing@morefund.biz</a> · Phone: <a href="tel:+639499555254">09499555254</a></p>
+        <p>If you have concerns or requests regarding your personal data, contact us and we will respond promptly.</p>
+      </div>
+      <footer>
+        <button class="btn secondary" id="privacyClose2">Close</button>
+        <button class="btn" id="privacyAccept">I Understand</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Terms of Service Modal -->
+  <div class="modal-backdrop" id="tosModal" aria-hidden="true" role="dialog" aria-labelledby="tosTitle">
+    <div class="modal" role="document">
+      <header>
+        <h3 id="tosTitle">Terms of Service</h3>
+        <button class="close" id="tosClose" aria-label="Close">×</button>
+      </header>
+      <div class="body">
+        <p><strong>Effective:</strong> October 14, 2025</p>
+        <p>By using the MoreFund PH website and submitting inquiries, you agree to these Terms. If you do not agree, please discontinue use.</p>
+
+        <h4>1. Nature of Service</h4>
+        <p>MoreFund PH is a brokerage/marketing partner, not a lender. We coordinate with duly registered lending institutions and provide pre-screening and documentation assistance.</p>
+
+        <h4>2. No Financial Advice</h4>
+        <p>All information is for general guidance. Final loan terms are provided by partner lenders. You should assess suitability and seek independent advice when needed.</p>
+
+        <h4>3. User Responsibilities</h4>
+        <ul>
+          <li>Provide accurate, current information.</li>
+          <li>Do not submit unlawful or fraudulent content.</li>
+          <li>Comply with applicable laws and lender requirements.</li>
+        </ul>
+
+        <h4>4. Intellectual Property</h4>
+        <p>All site content is owned by MoreFund PH or its licensors. You may not copy, modify, or distribute content without permission.</p>
+
+        <h4>5. Limitation of Liability</h4>
+        <p>We are not liable for indirect, incidental, or consequential damages arising from use of the site or third-party lender decisions.</p>
+
+        <h4>6. Changes</h4>
+        <p>We may modify these Terms at any time. Continued use signifies acceptance of the updated Terms.</p>
+
+        <h4>7. Contact</h4>
+        <p>Email: <a href="mailto:marketing@morefund.biz">marketing@morefund.biz</a> · Phone: <a href="tel:+639499555254">09499555254</a></p>
+      </div>
+      <footer>
+        <button class="btn secondary" id="tosClose2">Close</button>
+        <button class="btn" id="tosAccept">I Understand</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Responsible Borrowing Modal -->
+  <div class="modal-backdrop" id="rbModal" aria-hidden="true" role="dialog" aria-labelledby="rbTitle">
+    <div class="modal" role="document">
+      <header>
+        <h3 id="rbTitle">Responsible Borrowing</h3>
+        <button class="close" id="rbClose" aria-label="Close">×</button>
+      </header>
+      <div class="body">
+        <p>We encourage clients to borrow responsibly and choose products suited to their needs and capacity.</p>
+
+        <h4>Guiding Principles</h4>
+        <ul>
+          <li><strong>Assess affordability:</strong> Borrow only what you can repay on time.</li>
+          <li><strong>Understand the terms:</strong> Review rates, fees, collateral, and penalties before you proceed.</li>
+          <li><strong>Compare options:</strong> Consider alternatives and choose the most suitable product.</li>
+          <li><strong>Keep documents safe:</strong> Maintain copies of contracts, receipts, and communications.</li>
+          <li><strong>Communicate early:</strong> If you foresee difficulty, inform the lender to discuss options.</li>
+        </ul>
+
+        <h4>Support</h4>
+        <p>We can help explain requirements and timelines. Final approval and terms remain with partner lenders.</p>
+
+        <h4>Contact</h4>
+        <p>Email: <a href="mailto:marketing@morefund.biz">marketing@morefund.biz</a> · Phone: <a href="tel:+639499555254">09499555254</a></p>
+      </div>
+      <footer>
+        <button class="btn secondary" id="rbClose2">Close</button>
+        <button class="btn" id="rbAccept">I Understand</button>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    // Year + copy email
+    const yearEl=document.getElementById('year'); if(yearEl) yearEl.textContent=new Date().getFullYear();
+    const copyBtn = document.getElementById('copyEmail');
+    if(copyBtn){
+      copyBtn.addEventListener('click', async()=>{
+        const email='marketing@morefund.biz';
+        try{ await navigator.clipboard.writeText(email); document.getElementById('copyNote').textContent='Email copied to clipboard'; }
+        catch(e){ document.getElementById('copyNote').textContent='Copy failed. Tap and hold to copy: '+email; }
+      });
+    }
+
+    // Toast + demo form handlers
+    function toast(msg){
+      const t=document.createElement('div');
+      t.textContent=msg;
+      t.style.cssText='position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#0f6f3d;color:#fff;padding:10px 14px;border-radius:999px;box-shadow:var(--shadow);z-index:9999;font-weight:700';
+      document.body.appendChild(t);
+      setTimeout(()=>t.remove(),2400);
+    }
+    document.getElementById('lead').addEventListener('submit',(e)=>{ e.preventDefault(); const data=Object.fromEntries(new FormData(e.target)); console.log('Lead (demo):',data); toast('Thanks! We will contact you shortly.'); e.target.reset(); });
+    document.getElementById('contactForm').addEventListener('submit',(e)=>{ e.preventDefault(); const data=Object.fromEntries(new FormData(e.target)); console.log('Contact (demo):',data); toast('Message sent (demo)'); e.target.reset(); });
+
+    // Scroll-reveal animations for cards
+    (function(){
+      const els=[...document.querySelectorAll('.cards .card, .steps .card')];
+      const io=new IntersectionObserver((entries)=>{
+        entries.forEach((e)=>{
+          if(e.isIntersecting){
+            e.target.classList.add('in');
+            io.unobserve(e.target);
+          }
+        });
+      },{threshold:.16});
+      els.forEach((el,i)=>{ el.classList.add('reveal'); el.style.setProperty('--d', (i*90)+'ms'); io.observe(el); });
+    })();
+
+    // Smooth in-page nav scrolling (header/footer links)
+    (function(){
+      const anchors = document.querySelectorAll('nav a[href^="#"], .foot a[href^="#"]');
+      anchors.forEach(a => {
+        a.addEventListener('click', (e) => {
+          const id = a.getAttribute('href').slice(1);
+          const el = document.getElementById(id);
+          if(!el) return;
+          e.preventDefault();
+          el.scrollIntoView({behavior:'smooth', block:'start'});
+        });
+      });
+    })();
+
+    // Modal helpers
+    function setupModal(linkId, modalId, closeIds = [], acceptId = null){
+      const open = document.getElementById(linkId);
+      const modal = document.getElementById(modalId);
+      const closes = closeIds.map(id => document.getElementById(id)).filter(Boolean);
+      const accept = acceptId ? document.getElementById(acceptId) : null;
+
+      function show(){ if(!modal) return; modal.classList.add('show'); modal.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+      function hide(){ if(!modal) return; modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+
+      if(open && modal){ open.addEventListener('click', (e)=>{ e.preventDefault(); show(); }); }
+      closes.forEach(btn => btn.addEventListener('click', hide));
+      if(accept){ accept.addEventListener('click', hide); }
+      modal && modal.addEventListener('click', (e)=>{ if(e.target === modal) hide(); });
+      document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && modal.classList.contains('show')) hide(); });
+    }
+
+    // Initialize three modals
+    setupModal('privacyLink','privacyModal',['privacyClose','privacyClose2'],'privacyAccept');
+    setupModal('tosLink','tosModal',['tosClose','tosClose2'],'tosAccept');
+    setupModal('rbLink','rbModal',['rbClose','rbClose2'],'rbAccept');
+  </script>
+</body>
+</html>
