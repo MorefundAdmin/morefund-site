@@ -13,6 +13,15 @@
   <meta property="og:url" content="https://morefund.ph/" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
+  <!-- Google tag (gtag.js) - GA4: place after meta tags, inside <head> -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-40FZTSM0DR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-40FZTSM0DR');
+  </script>
+
   <style>
     :root{
       --green-900:#0f6f3d; --green-700:#167a45; --green-600:#16a34a; --green-500:#22c55e;
@@ -56,6 +65,7 @@
     .hero .orb.o1{width:420px;height:420px; left:-120px; top:-80px; background:radial-gradient(circle at 30% 30%, #22c55e 0%, #16a34a 40%, transparent 70%); animation: drift1 18s ease-in-out infinite alternate}
     .hero .orb.o2{width:520px;height:520px; right:-160px; top:-60px; background:radial-gradient(circle at 70% 40%, #0f6f3d 0%, #16a34a 40%, transparent 70%); animation: drift2 22s ease-in-out infinite alternate}
     .hero .orb.o3{width:380px;height:380px; left:40%; bottom:-140px; background:radial-gradient(circle at 30% 70%, #22c55e 0%, #0f6f3d 50%, transparent 72%); animation: drift3 26s ease-in-out infinite alternate}
+
     @keyframes drift1{0%{transform:translate(0,0) scale(1)}100%{transform:translate(30px,20px) scale(1.08)}}
     @keyframes drift2{0%{transform:translate(0,0) scale(1)}100%{transform:translate(-40px,24px) scale(1.06)}}
     @keyframes drift3{0%{transform:translate(0,0) scale(1)}100%{transform:translate(40px,-24px) scale(1.05)}}
