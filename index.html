@@ -20,6 +20,133 @@
     function gtag(){ dataLayer.push(arguments); }
     gtag('js', new Date());
     gtag('config', 'G-40FZTSM0DR');
+
+    // safe-gtag: tries gtag, falls back to dataLayer push
+    function sendGtagEvent(name, params = {}) {
+      try {
+        if (typeof gtag === 'function') {
+          gtag('event', name, params);
+        } else if (window.dataLayer && Array.isArray(window.dataLayer)) {
+          window.dataLayer.push(Object.assign({ event: name }, params));
+        } else {
+          console.warn('GA not found; event not sent:', name, params);
+        }
+      } catch (e) {
+        console.error('Error sending GA event', e);
+      }
+    }
+
+    /* ---------- 1) First visit (one-time) ---------- */
+    (function trackFirstVisit(){
+      try {
+        const key = 'mf_first_visit_sent_v1';
+        if (!localStorage.getItem(key)) {
+          const ts = new Date().toISOString();
+          sendGtagEvent('mf_first_visit', {
+            first_visit_timestamp: ts,
+            site: 'morefund.ph',
+            page_location: location.href,
+            page_title: document.title
+          });
+          localStorage.setItem(key, ts);
+        }
+      } catch (e) { console.warn('First visit tracking failed', e); }
+    })();
+
+    /* ---------- 2) Track clicks to primary anchors (nav & footer, CTAs) ---------- */
+    (function trackAnchorClicks(){
+      // select anchors and CTA buttons
+      const anchors = Array.from(document.querySelectorAll('a[href^="#"], button[id="copyEmail"], .cta-btn'));
+      anchors.forEach(a => {
+        a.addEventListener('click', function(e){
+          try {
+            const href = a.getAttribute('href') || '';
+            let targetId = null;
+            if (href.startsWith('#')) targetId = href.slice(1);
+
+            const label = (a.innerText || a.getAttribute('aria-label') || a.id || targetId || 'unknown').trim().slice(0,200);
+
+            let locationContext = 'other';
+            if (a.closest('header')) locationContext = 'header';
+            else if (a.closest('footer')) locationContext = 'footer';
+            else if (a.closest('.hero')) locationContext = 'hero';
+            else if (a.closest('#contact')) locationContext = 'contact-section';
+
+            sendGtagEvent('mf_nav_click', {
+              element_text: label,
+              element_id: a.id || null,
+              element_target_id: targetId || null,
+              element_location: locationContext,
+              page_location: location.href,
+              page_title: document.title
+            });
+          } catch (err) { console.warn('Anchor click tracking error', err); }
+        }, { passive: true });
+      });
+    })();
+
+    /* ---------- 3) Track form success via mf_form_success event ---------- */
+    (function hookFormSubmits(){
+      // helper to safely read values from a form
+      function readVal(form, name) {
+        try {
+          const el = form.querySelector(`[name="${name}"]`);
+          return el ? (el.value || null) : null;
+        } catch(e) { return null; }
+      }
+
+      // Listen only for the canonical success event dispatched by submit handlers
+      document.addEventListener('mf_form_success', function(evt){
+        try {
+          const detail = evt && evt.detail ? evt.detail : {};
+          const formId = detail.formId || null;
+          const paramsFromDispatch = detail.params || {};
+          if (!formId) return;
+
+          if (formId === 'lead') {
+            const params = Object.assign({
+              page_location: location.href,
+              page_title: document.title,
+              form_id: 'lead',
+              form_label: 'Request Callback'
+            }, paramsFromDispatch);
+
+            sendGtagEvent('mf_lead_submitted', params);
+
+            // recommended GA suggested event for conversions
+            sendGtagEvent('generate_lead', {
+              value: params.requested_amount ? Number(params.requested_amount) : null,
+              currency: 'PHP',
+              page_location: location.href,
+              page_title: document.title
+            });
+          } else if (formId === 'contactForm') {
+            const params = Object.assign({
+              page_location: location.href,
+              page_title: document.title,
+              form_id: 'contactForm',
+              form_label: 'Contact Form'
+            }, paramsFromDispatch);
+
+            sendGtagEvent('mf_contact_submitted', params);
+          } else {
+            // generic fallback
+            sendGtagEvent('mf_form_submitted', Object.assign({ page_location: location.href, page_title: document.title, form_id: formId }, paramsFromDispatch));
+          }
+        } catch (err) {
+          console.warn('mf_form_success handler error', err);
+        }
+      }, false);
+    })();
+
+    /* ---------- 4) Optional: expose a helper to manually fire events ---------- */
+    window.MoreFundAnalytics = {
+      send: sendGtagEvent,
+      sendManualLead: function(obj){
+        sendGtagEvent('mf_lead_submitted', Object.assign({page_location: location.href, page_title: document.title, form_id: 'manual'}, obj || {}));
+        sendGtagEvent('generate_lead', { value: obj && obj.requested_amount ? Number(obj.requested_amount) : null, currency: 'PHP' });
+      }
+    };
   </script>
 
   <style>
@@ -601,7 +728,7 @@
       if (!res.ok) throw new Error('Network response was not ok');
     }
 
-    // Attach to both forms
+    // Attach to both forms and dispatch mf_form_success on success
     [['lead','Thanks! We will contact you shortly.'], ['contactForm','Message sent!']].forEach(([id, okMsg])=>{
       const form=document.getElementById(id);
       if(!form) return;
@@ -612,7 +739,30 @@
         try{
           await submitNetlifyForm(form);
           toast(okMsg);
+
+          // Read useful params to include in analytics
+          const read = (name) => {
+            try { const el = form.querySelector(`[name="${name}"]`); return el ? el.value : null; } catch { return null; }
+          };
+          const params = {};
+          if (form.id === 'lead') {
+            params.loan_type = read('loanType');
+            params.requested_amount = read('amount');
+            params.contact_mobile_provided = !!read('mobile');
+            params.contact_email_provided = !!read('email');
+          } else if (form.id === 'contactForm') {
+            params.contact_name = read('cname');
+            params.contact_email = read('cemail');
+          }
+
+          // reset form UI
           form.reset();
+
+          // Dispatch canonical success event for analytics (reliable)
+          document.dispatchEvent(new CustomEvent('mf_form_success', {
+            detail: { formId: form.id, params }
+          }));
+
         }catch(err){
           console.error('Form submit failed:', err);
           toast('Something went wrong. Please try again.');
