@@ -821,6 +821,34 @@
     setupModal('privacyLink','privacyModal',['privacyClose','privacyClose2'],'privacyAccept');
     setupModal('tosLink','tosModal',['tosClose','tosClose2'],'tosAccept');
     setupModal('rbLink','rbModal',['rbClose','rbClose2'],'rbAccept');
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+    // Select the button by class
+    const callbackBtn = document.querySelector(".submit");
+    
+    if (!callbackBtn) {
+        console.log("Button not found!");
+        return;
+    }
+
+    // Add click listener
+    callbackBtn.addEventListener("click", function (e) {
+        // Optional: prevent form submission temporarily for testing
+        // e.preventDefault();
+
+        // Log to console for testing
+        console.log("Request Call Back button clicked!");
+
+        // Send event to Google Analytics
+        gtag('event', 'request_callback', {
+            'event_category': 'Form',
+            'event_label': 'Request Call Back Button'
+        });
+    });
+});
   </script>
+
+  
 </body>
 </html>
